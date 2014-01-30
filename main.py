@@ -27,7 +27,7 @@ c = argmin(sensorTimes)
 cTime = sensorTimes[c]
 
 #sensors delta time relative to sensor c
-t = sensorDeltaTimes = matrix( [ sensorTime - cTime for sensorTime in sensorTimes ] )
+t = sensorDeltaTimes = [ sensorTime - cTime for sensorTime in sensorTimes ]
 
 ijs = range(nSensors)
 del ijs[c]
@@ -38,20 +38,18 @@ iRow = 0
 rankA = 0
 for i in ijs:
 	for j in ijs:
-		#original 2*(v*(t(j)-t(c))*(p(:,i)-p(:,c)).T-v*(t(i)-t(c))*(p(:,j)-p(:,c)).T)
-		#I swapped the column accessors to row accessors, because it seemed the wrong way round 
-		A[iRow,:] = 2*( v*(t[j]-t[c])*(p(:,i)-p(:,c)).T - v*(t[i]-t[c])*(p[:,j]-p[:,c]).T )
-		b[iRow,1] = 0.0 #Something something, too tired heading to bed
+		A[iRow,:] = 2*( v*(t[j]-t[c])*(p[:,i]-p[:,c]).T - v*(t[i]-t[c])*(p[:,j]-p[:,c]).T )
+		b[iRow,0] = v*(t[i]-t[c])*(v*v*(t[j]-t[c])**2-p[:,j].T*p[:,j]) + \
+		(v*(t[i]-t[c])-v*(t[j]-t[c]))*p[:,c].T*p[:,c] + \
+		v*(t[j]-t[c])*(p[:,i].T*p[:,i]-v*v*(t[i]-t[c])**2)
 		rankA = matrix_rank(A)
-		if rankA >= nDim :
+		if rankA >= numOfDimensions :
 			break
-
 		iRow += 1
-
-	if rankA >= nDim:
+	if rankA >= numOfDimensions:
 		break
 
-calculatedLocation = solve(A,b)
+calculatedLocation = asarray( lstsq(A,b)[0] )[:,0]
 
 print "Emitter location: %s " % emitterLocation
 print "Calculated position of emitter: %s " % calculatedLocation
