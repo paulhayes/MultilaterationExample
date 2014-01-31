@@ -38,10 +38,10 @@ iRow = 0
 rankA = 0
 for i in ijs:
 	for j in ijs:
-		A[iRow,:] = 2*( v*(t[j]-t[c])*(p[:,i]-p[:,c]).T - v*(t[i]-t[c])*(p[:,j]-p[:,c]).T )
-		b[iRow,0] = v*(t[i]-t[c])*(v*v*(t[j]-t[c])**2-p[:,j].T*p[:,j]) + \
-		(v*(t[i]-t[c])-v*(t[j]-t[c]))*p[:,c].T*p[:,c] + \
-		v*(t[j]-t[c])*(p[:,i].T*p[:,i]-v*v*(t[i]-t[c])**2)
+		A[iRow,:] = 2*( v*(t[j])*(p[:,i]-p[:,c]).T - v*(t[i])*(p[:,j]-p[:,c]).T )
+		b[iRow,0] = v*(t[i])*(v*v*(t[j])**2-p[:,j].T*p[:,j]) + \
+		(v*(t[i])-v*(t[j]))*p[:,c].T*p[:,c] + \
+		v*(t[j])*(p[:,i].T*p[:,i]-v*v*(t[i])**2)
 		rankA = matrix_rank(A)
 		if rankA >= numOfDimensions :
 			break
