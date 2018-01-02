@@ -51,8 +51,5 @@ for i in ijs:
 
 calculatedLocation = asarray( lstsq(A,b)[0] )[:,0]
 
-print json.dumps( A.tolist() )
-print json.dumps( b.tolist() )
-
 print "Emitter location: %s " % emitterLocation
 print "Calculated position of emitter: %s " % calculatedLocation
